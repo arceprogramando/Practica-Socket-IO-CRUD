@@ -1,8 +1,18 @@
+// Cliente
 const socket = io();
 
-socket.on('ping', () => {
+const noteForm = document.querySelector('#noteForm');
+const title = document.querySelector('#title');
+const description = document.querySelector('#description');
 
-    socket.emit('pong')
-    console.log('Escuchado desde el cliente');
+
+
+noteForm.addEventListener('submit', event => {
+    event.preventDefault();
+
+    socket.emit('client:newnote', {
+        title: title.value,
+        description: description.value
+    })
 
 })

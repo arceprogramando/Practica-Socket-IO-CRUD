@@ -20,9 +20,9 @@ const io = new Server(server)
 io.on('connection', (socket) => {
     console.log('Nueva conexion', socket.id)
 
-    socket.emit('ping')
-    socket.on('pong', () => {
-        console.log('pong')
+    socket.on('client:newnote', data => {
+        console.log(data)
     })
+
 })
 
