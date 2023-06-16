@@ -1,18 +1,13 @@
-// Cliente
-const socket = io();
+//cliente
 
-const noteForm = document.querySelector('#noteForm');
-const title = document.querySelector('#title');
-const description = document.querySelector('#description');
+const noteForm = document.getElementById('noteForm');
+const title = document.getElementById('title');
+const description = document.getElementById('description');
 
 
 
 noteForm.addEventListener('submit', event => {
     event.preventDefault();
 
-    socket.emit('client:newnote', {
-        title: title.value,
-        description: description.value
-    })
-
+    saveNote(title.value, description.value)
 })
