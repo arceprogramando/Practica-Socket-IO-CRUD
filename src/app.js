@@ -5,7 +5,7 @@ import { Server } from 'socket.io';
 import { v4 as uuid } from 'uuid';
 
 // Initializations
-const notes = []
+let notes = []
 const app = express();
 
 // Settings
@@ -23,10 +23,20 @@ io.on('connection', (socket) => {
     console.log('Nueva conexion', socket.id);
 
     socket.emit('server:loadnotes', notes);
+
     socket.on('client:newnote', (newNote) => {
         const note = { ...newNote, id: uuid() };
         notes.push(note);
         socket.emit('server:newnote', note)//Referencia a guardar una nueva nota
+    })
+
+    socket.on('client:deletenote', (noteId) => {
+        notes = notes.filter((note) => note.id !== noteId)
+        socket.emit('server:loadnotes', notes)
+    })
+
+    socket.on('client:getnote', id => {
+        console.log(id)
     })
 })
 

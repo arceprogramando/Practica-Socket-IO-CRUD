@@ -7,6 +7,15 @@ const saveNote = (title, description) => {
     });
 };
 
+const deleteNote = id => {
+    socket.emit('client:deletenote', id);
+
+}
+
+const getNote = (id) => {
+    socket.emit('client:getnote', id)
+}
+
 socket.on("server:newnote", appendNote);
 
-socket.on('server:loadnotes', loadNotes);
+socket.on('server:loadnotes', renderNotes);
