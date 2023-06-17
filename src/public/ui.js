@@ -1,12 +1,11 @@
 const notesList = document.getElementById('notes');
 
-let saveId = ""
-
+let savedId = ""
 
 const noteUI = (note) => {
     const div = document.createElement('div')
     div.innerHTML += `
-        <div class="card card-body rounded-0 mb-2 ">
+        <div class="card card-body rounded-0 mb-2 animate__animated animate__fadeInUp">
             <div class="d-flex justify-content-between">
                 <h1 class="h3 card-title">${note.title}</h1>
                 <div>
@@ -23,20 +22,21 @@ const noteUI = (note) => {
 
     btnDelete.addEventListener("click", () => deleteNote(btnDelete.dataset.id));
 
-    btnUpdate.addEventListener('click', () => getNote(btnUpdate.dataset.id))
+    btnUpdate.addEventListener('click', () => socket.emit('client:getnote', btnUpdate.dataset.id))
 
     return div;
 };
 
 const renderNotes = (notes) => {
+    savedId = '';
     notesList.innerHTML = '';
-
+    console.log(notes)
     notes.forEach((note) => {
         notesList.append(noteUI(note))
     });
 };
 
-const appendNote = note => {
+const appendNote = (note) => {
     notesList.append(noteUI(note))
 
 }

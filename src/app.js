@@ -20,23 +20,41 @@ const server = app.listen(app.get('port'), () => {
 const io = new Server(server);
 
 io.on('connection', (socket) => {
-    console.log('Nueva conexion', socket.id);
 
     socket.emit('server:loadnotes', notes);
 
     socket.on('client:newnote', (newNote) => {
         const note = { ...newNote, id: uuid() };
         notes.push(note);
-        socket.emit('server:newnote', note)//Referencia a guardar una nueva nota
+        io.emit('server:newnote', note)//Referencia a guardar una nueva nota
     })
 
     socket.on('client:deletenote', (noteId) => {
         notes = notes.filter((note) => note.id !== noteId)
-        socket.emit('server:loadnotes', notes)
+        io.emit('server:loadnotes', notes)
     })
 
-    socket.on('client:getnote', id => {
-        console.log(id)
+    socket.on('client:getnote', noteId => {
+        const note = notes.find(note => note.id === noteId);
+        socket.emit('server:selectednote', note);
+    })
+    socket.on('server:selectednote', note => {
+        const title = document.getElementById('title')
+        const description = document.getElementById('description')
+
+        title.value = note.title;
+        description.value = note.description;
+    })
+
+    socket.on('client:updatenote', updatedNote => {
+        notes = notes.map((note) => {
+            if (note.id === updatedNote.id) {
+                note.title = updatedNote.title;
+                note.description = updatedNote.description;
+            }
+            return note;
+        })
+        socket.emit('server:loadnotes', notes);
     })
 })
 
