@@ -4,11 +4,9 @@ import { __dirname } from './utils.js';
 import { Server } from 'socket.io';
 import { v4 as uuid } from 'uuid';
 
-// Initializations
 let notes = []
 const app = express();
 
-// Settings
 app.set('port', 8000);
 
 app.use(express.static(__dirname + '/public'));
@@ -26,7 +24,7 @@ io.on('connection', (socket) => {
     socket.on('client:newnote', (newNote) => {
         const note = { ...newNote, id: uuid() };
         notes.push(note);
-        io.emit('server:newnote', note)//Referencia a guardar una nueva nota
+        io.emit('server:newnote', note)
     })
 
     socket.on('client:deletenote', (noteId) => {
