@@ -12,7 +12,7 @@ app.set('port', 8000);
 app.use(express.static(__dirname + '/public'));
 
 const server = app.listen(app.get('port'), () => {
-    console.log(`Server on post: \n http://localhost:${app.get('port')}`);
+    console.log(`http://localhost:${app.get('port')}`);
 })
 
 const io = new Server(server);
